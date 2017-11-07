@@ -23,6 +23,8 @@ bool Application2D::startup() {
 	m_cameraX = 0;
 	m_cameraY = 0;
 	m_timer = 0;
+	mPx = 0;
+	mPy = 0;
 
 	return true;
 }
@@ -54,6 +56,19 @@ void Application2D::update(float deltaTime) {
 
 	if (input->isKeyDown(aie::INPUT_KEY_RIGHT))
 		m_cameraX += 500.0f * deltaTime;
+	
+	// use WASD to move box
+	if (input->isKeyDown(aie::INPUT_KEY_W))
+		mPy += 500.0f * deltaTime;
+	
+	if (input->isKeyDown(aie::INPUT_KEY_S))
+		mPy -= 500.0f * deltaTime;
+
+	if (input->isKeyDown(aie::INPUT_KEY_A))
+		mPx -= 500.0f * deltaTime;
+
+	if (input->isKeyDown(aie::INPUT_KEY_D))
+		mPx += 500.0f * deltaTime;
 
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
@@ -94,6 +109,10 @@ void Application2D::draw() {
 	m_2dRenderer->setRenderColour(1, 1, 0, 1);
 	m_2dRenderer->drawSprite(nullptr, 400, 400, 50, 50, 3.14159f * 0.25f, 1);
 	
+	// a box
+	m_2dRenderer->drawBox(mPx, mPy, 80, 80, 0);
+	
+
 	// output some text, uses the last used colour
 	char fps[32];
 	sprintf_s(fps, 32, "FPS: %i", getFPS());
