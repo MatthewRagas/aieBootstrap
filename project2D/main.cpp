@@ -10,6 +10,5 @@ int main() {
 
 	// deallocation
 	delete app;
-
 	return 0;
 }
