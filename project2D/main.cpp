@@ -1,5 +1,5 @@
-#include "Application2D.h"
-
+#include"Application2D.h"
+#include <Vector2.h>
 int main() {
 	
 	// allocation
@@ -11,4 +11,8 @@ int main() {
 	// deallocation
 	delete app;
 	return 0;
+	Vector2 FUCKYES(6, 5);
+	Vector2 REEEEEE(5, 6);
+	Vector2 JESUSTHANKYOU = FUCKYES + REEEEEE;
+	system("Pause");
 }
