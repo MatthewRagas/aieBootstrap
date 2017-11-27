@@ -59,16 +59,18 @@ void Application2D::update(float deltaTime) {
 	
 	// use WASD to move box
 	if (input->isKeyDown(aie::INPUT_KEY_W))
-		mPy += 500.0f * deltaTime;
+		mPy += 480.0f * deltaTime;
 	
 	if (input->isKeyDown(aie::INPUT_KEY_S))
-		mPy -= 500.0f * deltaTime;
+		mPy -= 480.0f * deltaTime;
+
+	
 
 	if (input->isKeyDown(aie::INPUT_KEY_A))
-		mPx -= 500.0f * deltaTime;
+		mPx -= 480.0f * deltaTime;
 
 	if (input->isKeyDown(aie::INPUT_KEY_D))
-		mPx += 500.0f * deltaTime;
+		mPx += 480.0f * deltaTime;
 
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
