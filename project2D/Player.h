@@ -1,5 +1,6 @@
 #pragma once
 #include <Vector2.h>
+#include"Input.h"
 class Player
 {
 	int mHealth;
@@ -12,9 +13,10 @@ public:
 	Player();
 	~Player();
 	Player(int health, int movepseed, Vector2 *position);
-	void MovePlayer(float deltaTime);
-	int TakeDamage();
+	void MovePlayer(float deltaTime, aie::Input *input);
+	void TakeDamage(int amount);
+	int GetHealth();
 	void Shoot();
-	Vector2 Position(Vector2 position);
+	Vector2 Position();
 	void GameOver();
 };
