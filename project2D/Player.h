@@ -16,4 +16,5 @@ public:
 	int TakeDamage();
 	void Shoot();
 	Vector2 Position(Vector2 position);
+	void GameOver();
 };

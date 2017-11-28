@@ -1,5 +1,7 @@
 #include "Player.h"
 #include"Input.h"
+#include<Font.h>
+#include"Renderer2D.h"
 
 
 Player::Player()
@@ -47,5 +49,16 @@ void Player::Shoot()
 
 Vector2 Player::Position(Vector2 position)
 {
+
 	return Vector2();
+}
+
+void Player::GameOver()
+{
+	aie::Font* m_font = new aie::Font("./font/consolas.ttf", 32);
+	aie::Renderer2D* m_2dRenderer = new aie::Renderer2D();
+	if (mHealth == 0)
+	{
+		m_2dRenderer->drawText(m_font, "You dieded.\n GameOver", 0, 720 - 64);
+	}
 }
