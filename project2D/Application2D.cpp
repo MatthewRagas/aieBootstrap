@@ -60,15 +60,12 @@ void Application2D::update(float deltaTime) {
 	//	m_cameraX += 550.0f * deltaTime;
 	
 	// use WASD to move Player
-	mPlayer->MovePlayer(deltaTime, input);
+	if(mPlayer->GetHealth() > 0)
+		mPlayer->MovePlayer(deltaTime, input);
 
 	//Player take damage
 	if (input->isKeyDown(aie::INPUT_KEY_Q))
 		mPlayer->TakeDamage(10);
-
-	//Game Over condition
-	if (mPlayer->GetHealth() <= 0);
-		draw();
 		
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
@@ -86,9 +83,7 @@ void Application2D::draw() {
 	// begin drawing sprites
 	m_2dRenderer->begin();
 
-	//Game Over Text
-	if (mPlayer->GetHealth() <= 0)
-		mPlayer->GameOver();
+	
 
 	// demonstrate animation
 	/*m_2dRenderer->setUVRect(int(m_timer) % 8 / 8.0f, 0, 1.f / 8, 1.f / 8);
@@ -106,14 +101,15 @@ void Application2D::draw() {
 	m_2dRenderer->drawCircle(sin(m_timer) * 100 + 600, 150, 50);*/
 
 	// draw a rotating red box
-	m_2dRenderer->setRenderColour(1, 0, 0, 1);
-	m_2dRenderer->drawBox(600, 500, 60, 20, m_timer);
+	/*m_2dRenderer->setRenderColour(1, 0, 0, 1);
+	m_2dRenderer->drawBox(600, 500, 60, 20, m_timer);*/
 
 	// draw a slightly rotated sprite with no texture, coloured yellow
 	/*m_2dRenderer->setRenderColour(1, 1, 0, 1);
 	m_2dRenderer->drawSprite(nullptr, 400, 400, 50, 50, 3.14159f * 0.25f, 1);*/
 	
 	// output some text, uses the last used colour
+	m_2dRenderer->setRenderColour(1, 0, 0, 1);
 	char fps[32];
 	sprintf_s(fps, 32, "FPS: %i", getFPS());
 	m_2dRenderer->drawText(m_font, fps, 0, 850 - 32);
@@ -123,6 +119,16 @@ void Application2D::draw() {
 	// a box
 	m_2dRenderer->setRenderColour(1, 1, 1, 1);
 	m_2dRenderer->drawSprite(m_shipTexture, mPlayer->Position().mX , mPlayer->Position().mY, 80, 80, 0);
+	
+	//Game Over Text
+	if (mPlayer->GetHealth() <= 0)
+	{
+		m_2dRenderer->setRenderColour(1, 0, 1, 1);
+		m_2dRenderer->drawText(m_font, "You dieded...", 650, 650);
+		m_2dRenderer->drawText(m_font, "Press esc to exit", 650, 600);
+		m_2dRenderer->drawText(m_font, "or", 650, 550);
+		m_2dRenderer->drawText(m_font, "press Space to restart.", 650, 500);
+	}
 
 	// done drawing sprites
 	m_2dRenderer->end();
