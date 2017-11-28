@@ -18,5 +18,4 @@ public:
 	int GetHealth();
 	void Shoot();
 	Vector2 Position();
-	void GameOver();
 };

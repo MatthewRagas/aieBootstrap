@@ -54,10 +54,3 @@ Vector2 Player::Position()
 
 	return *mPosition;
 }
-
-void Player::GameOver()
-{
-	aie::Font* m_font = new aie::Font("./font/consolas.ttf", 32);
-	aie::Renderer2D* m_2dRenderer = new aie::Renderer2D();
-	m_2dRenderer->drawText(m_font, "You dieded.\n", 0, 720 - 64);
-}
