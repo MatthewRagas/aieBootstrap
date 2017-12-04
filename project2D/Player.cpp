@@ -1,42 +1,43 @@
 #include "Player.h"
-
+#include <math.h>
 #include<Font.h>
 #include"Renderer2D.h"
 
 
 Player::Player()
 {
-	mHealth = 100;
-	mMovespeed = 20;
-	mPosition = new Vector2();
 }
 
 Player::~Player()
 {
 }
 
-Player::Player(int health, int movespeed, Vector2 *position)
+Player::Player(int health, int movespeed, Vector2 *position, float rotation)
 {
 	mHealth = health;
 	mMovespeed = movespeed;
 	mPosition = position;
+	mForward = new Vector2();
+	mRotation = rotation;
+
 }
 
 void Player::MovePlayer(float deltaTime, aie::Input *input)
-{	
+{
+	mMouse = new Vector2(input->getMouseX(), input->getMouseY());
 	if (input->isKeyDown(aie::INPUT_KEY_W))
-		mPosition->mY += 480.0f * deltaTime;
+		mPosition->mY += mMovespeed * deltaTime;
 	if (input->isKeyDown(aie::INPUT_KEY_S))
-		mPosition->mY -= 480.0f * deltaTime;
+		mPosition->mY -= mMovespeed * deltaTime;
 	if (input->isKeyDown(aie::INPUT_KEY_A))
-		mPosition->mX -= 480.0f * deltaTime;
+		mPosition->mX -= mMovespeed * deltaTime;
 	if (input->isKeyDown(aie::INPUT_KEY_D))
-		mPosition->mX += 480.0f * deltaTime;
-		
+		mPosition->mX += mMovespeed * deltaTime;
+
 }
 
 void Player::TakeDamage(int amount)
-{	
+{
 	mHealth -= amount;
 }
 
@@ -45,12 +46,8 @@ int Player::GetHealth()
 	return mHealth;
 }
 
-void Player::Shoot()
-{
-}
-
 Vector2 Player::Position()
 {
-
 	return *mPosition;
 }
+
