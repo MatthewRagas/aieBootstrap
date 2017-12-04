@@ -12,27 +12,29 @@ Application2D::~Application2D() {
 }
 
 bool Application2D::startup() {
-	
+
 	m_2dRenderer = new aie::Renderer2D();
 
 	m_texture = new aie::Texture("./textures/numbered_grid.tga");
 	m_shipTexture = new aie::Texture("./textures/ship.png");
+	mPlayerTexture = new aie::Texture("./textures/survivor_handgun.png");
+	mBulletTexture = new aie::Texture("./textures/bullet.png");
 
 	m_font = new aie::Font("./font/consolas.ttf", 32);
-	
+
 	m_cameraX = 0;
 	m_cameraY = 0;
 	m_timer = 0;
 	mPx = 750;
 	mPy = 450;
 
-	mPlayer = new Player(5, 5, new Vector2(mPx, mPy));
+	mPlayer = new Player(100, 250, new Vector2(mPx, mPy), 0.0f);
 
 	return true;
 }
 
 void Application2D::shutdown() {
-	
+
 	delete m_font;
 	delete m_texture;
 	delete m_shipTexture;
@@ -47,26 +49,30 @@ void Application2D::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	// use arrow keys to move camera
-	//if (input->isKeyDown(aie::INPUT_KEY_W))
-	//	m_cameraY += 550.0f * deltaTime;
+	if (input->isKeyDown(aie::INPUT_KEY_LEFT))
+		mPlayer->mRotation += 5.0f * deltaTime;
 
-	//if (input->isKeyDown(aie::INPUT_KEY_S))
-	//	m_cameraY -= 550.0f * deltaTime;
+	if (input->isKeyDown(aie::INPUT_KEY_RIGHT))
+		mPlayer->mRotation -= 5.0f * deltaTime;
 
 	//if (input->isKeyDown(aie::INPUT_KEY_A))
 	//	m_cameraX -= 550.0f * deltaTime;
 
 	//if (input->isKeyDown(aie::INPUT_KEY_D))
 	//	m_cameraX += 550.0f * deltaTime;
-	
+
 	// use WASD to move Player
-	if(mPlayer->GetHealth() > 0)
+	if(mPlayer->GetHealth() > 0 && m_timer < 300)
 		mPlayer->MovePlayer(deltaTime, input);
 
 	//Player take damage
 	if (input->isKeyDown(aie::INPUT_KEY_Q))
 		mPlayer->TakeDamage(10);
-		
+
+
+
+
+
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
@@ -74,6 +80,7 @@ void Application2D::update(float deltaTime) {
 
 void Application2D::draw() {
 
+	aie::Input* input = aie::Input::getInstance();
 	// wipe the screen to the background colour
 	clearScreen();
 
@@ -83,15 +90,15 @@ void Application2D::draw() {
 	// begin drawing sprites
 	m_2dRenderer->begin();
 
-	
+
 
 	// demonstrate animation
 	/*m_2dRenderer->setUVRect(int(m_timer) % 8 / 8.0f, 0, 1.f / 8, 1.f / 8);
 	m_2dRenderer->drawSprite(m_texture, 200, 200, 100, 100);*/
 
-	// demonstrate spinning sprite
-	/*m_2dRenderer->setUVRect(0,0,1,1);
-	m_2dRenderer->drawSprite(m_shipTexture, 600, 400, 0, 0, m_timer, 1);*/
+	/* demonstrate spinning sprite*/
+	m_2dRenderer->setUVRect(0,0,1,1);
+	m_2dRenderer->drawSprite(m_shipTexture, 600, 400, 0, 0, m_timer, 1);
 
 	// draw a thin line
 	//m_2dRenderer->drawLine(300, 300, 600, 400, 2, 1);//
@@ -107,7 +114,7 @@ void Application2D::draw() {
 	// draw a slightly rotated sprite with no texture, coloured yellow
 	/*m_2dRenderer->setRenderColour(1, 1, 0, 1);
 	m_2dRenderer->drawSprite(nullptr, 400, 400, 50, 50, 3.14159f * 0.25f, 1);*/
-	
+
 	// output some text, uses the last used colour
 	m_2dRenderer->setRenderColour(1, 0, 0, 1);
 	char fps[32];
@@ -116,15 +123,42 @@ void Application2D::draw() {
 	m_2dRenderer->drawText(m_font, "Arcade Zombies", 0, 850);
 	m_2dRenderer->drawText(m_font, "Press esc to quit", 1200, 850);
 
-	// a box
+	// Draw player
+	//float mag = mPlayer->PositionForward().Magnitude() * mPlayer->Position().Magnitude();
+	//float angle = mPlayer->Position().Dot(mPlayer->PositionForward()) / mag;
+	///*std::cout << angle << std::endl;*/
+	/*mag *= -1;*/
 	m_2dRenderer->setRenderColour(1, 1, 1, 1);
-	m_2dRenderer->drawSprite(m_shipTexture, mPlayer->Position().mX , mPlayer->Position().mY, 80, 80, 0);
-	
+	m_2dRenderer->drawSprite(mPlayerTexture, mPlayer->Position().mX , mPlayer->Position().mY,
+							 80, 80, mPlayer->mRotation);
+
+	//Draw bullets
+	//Shoot gun
+	if (input->wasKeyPressed(aie::INPUT_KEY_DOWN))
+	{
+		float x = mPlayer->Position().mX + 32;
+		float y = mPlayer->Position().mY - 16;
+		m_2dRenderer->setRenderColour(1, 1, 1, 1);
+		m_2dRenderer->drawSprite(mBulletTexture, x, y, 5, 5, mPlayer->mRotation);
+	}
+	//Draw Mouse
+	m_2dRenderer->drawBox(mPlayer->mMouse->mX, mPlayer->mMouse->mY, 10, 10);
+
 	//Game Over Text
 	if (mPlayer->GetHealth() <= 0)
 	{
 		m_2dRenderer->setRenderColour(1, 0, 1, 1);
 		m_2dRenderer->drawText(m_font, "You dieded...", 650, 650);
+		m_2dRenderer->drawText(m_font, "Press esc to exit", 650, 600);
+		m_2dRenderer->drawText(m_font, "or", 650, 550);
+		m_2dRenderer->drawText(m_font, "press Space to restart.", 650, 500);
+	}
+
+	//Win condition text
+	if (m_timer >= 300)
+	{
+		m_2dRenderer->setRenderColour(1, 0, 1, 1);
+		m_2dRenderer->drawText(m_font, "You Win!", 650, 650);
 		m_2dRenderer->drawText(m_font, "Press esc to exit", 650, 600);
 		m_2dRenderer->drawText(m_font, "or", 650, 550);
 		m_2dRenderer->drawText(m_font, "press Space to restart.", 650, 500);

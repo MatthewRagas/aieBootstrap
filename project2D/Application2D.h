@@ -21,6 +21,8 @@ protected:
 	aie::Renderer2D*	m_2dRenderer;
 	aie::Texture*		m_texture;
 	aie::Texture*		m_shipTexture;
+	aie::Texture*		mPlayerTexture;
+	aie::Texture*       mBulletTexture;
 	aie::Font*			m_font;
 
 	Player *mPlayer;
