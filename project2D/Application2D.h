@@ -4,6 +4,7 @@
 #include "Renderer2D.h"
 #include "Player.h"
 #include "Bullet.h"
+#include "Walls.h"
 
 class Application2D : public aie::Application {
 public:
@@ -24,10 +25,11 @@ protected:
 	aie::Texture*		m_shipTexture;
 	aie::Texture*		mPlayerTexture;
 	aie::Texture*       mBulletTexture;
+	aie::Texture*		mTruckTexture;
 	aie::Font*			m_font;
 
 	Player *mPlayer;
-	Bullet *mBullet;
+	Walls *mTruck;
 
 	float m_cameraX, m_cameraY;
 	float m_timer;
