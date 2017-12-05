@@ -28,8 +28,9 @@ bool Application2D::startup() {
 	mPx = 750;
 	mPy = 450;
 
-	mPlayer = new Player(100, 250, new Vector2(mPx, mPy), 0.0f);
 
+	mPlayer = new Player(100, 250, new Vector2(mPx, mPy), 0.0f);
+	mBullet = new Bullet(new Vector2(mPx,mPy),500,0);
 	return true;
 }
 
@@ -49,11 +50,22 @@ void Application2D::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	// use arrow keys to move camera
-	if (input->isKeyDown(aie::INPUT_KEY_LEFT))
-		mPlayer->mRotation += 5.0f * deltaTime;
+	if (input->wasKeyPressed(aie::INPUT_KEY_LEFT)){
+		mPlayer->mRotation = 3.14f;
 
-	if (input->isKeyDown(aie::INPUT_KEY_RIGHT))
-		mPlayer->mRotation -= 5.0f * deltaTime;
+	}
+	if (input->wasKeyPressed(aie::INPUT_KEY_RIGHT)){
+		mPlayer->mRotation = 0.00f;
+
+	}
+	if (input->wasKeyPressed(aie::INPUT_KEY_UP)){
+		mPlayer->mRotation = 1.57f;
+
+	}
+	if (input->wasKeyPressed(aie::INPUT_KEY_DOWN)){
+		mPlayer->mRotation = 4.81f;
+		mBullet->mPosition->mY -= 200.00 * deltaTime;
+	}
 
 	//if (input->isKeyDown(aie::INPUT_KEY_A))
 	//	m_cameraX -= 550.0f * deltaTime;
@@ -68,10 +80,6 @@ void Application2D::update(float deltaTime) {
 	//Player take damage
 	if (input->isKeyDown(aie::INPUT_KEY_Q))
 		mPlayer->TakeDamage(10);
-
-
-
-
 
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
@@ -97,8 +105,8 @@ void Application2D::draw() {
 	m_2dRenderer->drawSprite(m_texture, 200, 200, 100, 100);*/
 
 	/* demonstrate spinning sprite*/
-	m_2dRenderer->setUVRect(0,0,1,1);
-	m_2dRenderer->drawSprite(m_shipTexture, 600, 400, 0, 0, m_timer, 1);
+	/*m_2dRenderer->setUVRect(0,0,1,1);
+	m_2dRenderer->drawSprite(m_shipTexture, 600, 400, 0, 0, m_timer, 1);*/
 
 	// draw a thin line
 	//m_2dRenderer->drawLine(300, 300, 600, 400, 2, 1);//
@@ -123,26 +131,26 @@ void Application2D::draw() {
 	m_2dRenderer->drawText(m_font, "Arcade Zombies", 0, 850);
 	m_2dRenderer->drawText(m_font, "Press esc to quit", 1200, 850);
 
-	// Draw player
-	//float mag = mPlayer->PositionForward().Magnitude() * mPlayer->Position().Magnitude();
-	//float angle = mPlayer->Position().Dot(mPlayer->PositionForward()) / mag;
-	///*std::cout << angle << std::endl;*/
-	/*mag *= -1;*/
+	//Draw bullet
 	m_2dRenderer->setRenderColour(1, 1, 1, 1);
-	m_2dRenderer->drawSprite(mPlayerTexture, mPlayer->Position().mX , mPlayer->Position().mY,
+	m_2dRenderer->drawSprite(mBulletTexture, mBullet->mPosition->mX, mBullet->mPosition->mY,
+		5, 5, mPlayer->mRotation);
+
+	// Draw player
+	m_2dRenderer->setRenderColour(1, 1, 1, 1);
+	m_2dRenderer->drawSprite(mPlayerTexture, mPlayer->Position().mX, mPlayer->Position().mY,
 							 80, 80, mPlayer->mRotation);
 
-	//Draw bullets
-	//Shoot gun
-	if (input->wasKeyPressed(aie::INPUT_KEY_DOWN))
-	{
-		float x = mPlayer->Position().mX + 32;
-		float y = mPlayer->Position().mY - 16;
-		m_2dRenderer->setRenderColour(1, 1, 1, 1);
-		m_2dRenderer->drawSprite(mBulletTexture, x, y, 5, 5, mPlayer->mRotation);
-	}
+
+
+	//float mag = mPlayer->PositionForward().Magnitude() * mPlayer->Position().Magnitude();
+	//float angle = mPlayer->Position().Dot(mPlayer->PositionForward()) / mag;
+	//*std::cout << angle << std::endl;*/
+	//*mag *= -1;*/
+
+
 	//Draw Mouse
-	m_2dRenderer->drawBox(mPlayer->mMouse->mX, mPlayer->mMouse->mY, 10, 10);
+
 
 	//Game Over Text
 	if (mPlayer->GetHealth() <= 0)

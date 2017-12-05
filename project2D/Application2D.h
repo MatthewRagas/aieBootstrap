@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include "Player.h"
+#include "Bullet.h"
 
 class Application2D : public aie::Application {
 public:
@@ -26,6 +27,7 @@ protected:
 	aie::Font*			m_font;
 
 	Player *mPlayer;
+	Bullet *mBullet;
 
 	float m_cameraX, m_cameraY;
 	float m_timer;
