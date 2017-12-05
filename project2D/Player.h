@@ -1,6 +1,6 @@
 #pragma once
-#include <Vector2.h>
-#include"Input.h"
+#include "Bullet.h"
+
 class Player
 {
 	int mHealth;
@@ -12,6 +12,9 @@ public:
 	Vector2 *mPosition;
 	float mRotation;
 	Vector2 *mMouse;   //Mouse x,y.
+	Bullet *mBullets;
+	int mNumBullets;
+	int mCurrentBullet;
 	Player();
 	~Player();
 	Player(int health, int movepseed, Vector2 *position, float rotation);
