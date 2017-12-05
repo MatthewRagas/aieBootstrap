@@ -17,14 +17,12 @@ Player::Player(int health, int movespeed, Vector2 *position, float rotation)
 	mHealth = health;
 	mMovespeed = movespeed;
 	mPosition = position;
-	mForward = new Vector2();
 	mRotation = rotation;
 
 }
 
 void Player::MovePlayer(float deltaTime, aie::Input *input)
 {
-	mMouse = new Vector2(input->getMouseX(), input->getMouseY());
 	if (input->isKeyDown(aie::INPUT_KEY_W))
 		mPosition->mY += mMovespeed * deltaTime;
 	if (input->isKeyDown(aie::INPUT_KEY_S))
@@ -33,6 +31,8 @@ void Player::MovePlayer(float deltaTime, aie::Input *input)
 		mPosition->mX -= mMovespeed * deltaTime;
 	if (input->isKeyDown(aie::INPUT_KEY_D))
 		mPosition->mX += mMovespeed * deltaTime;
+
+
 
 }
 
@@ -44,6 +44,12 @@ void Player::TakeDamage(int amount)
 int Player::GetHealth()
 {
 	return mHealth;
+}
+
+Vector2 Player::PositionForward()
+{
+
+	return Vector2();
 }
 
 Vector2 Player::Position()

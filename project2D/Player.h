@@ -5,10 +5,11 @@ class Player
 {
 	int mHealth;
 	int mMovespeed;
-	Vector2 *mPosition;//Player position x,y.
-	Vector2 *mForward; //direction character is facing = player position - mouse position.
+	//Player position x,y.
+	 //direction character is facing = player position - mouse position.
 
 public:
+	Vector2 *mPosition;
 	float mRotation;
 	Vector2 *mMouse;   //Mouse x,y.
 	Player();
@@ -17,6 +18,6 @@ public:
 	void MovePlayer(float deltaTime, aie::Input *input);
 	void TakeDamage(int amount);
 	int GetHealth();
-	/*Vector2 PositionForward();*/
+	Vector2 PositionForward();
 	Vector2 Position();
 };
