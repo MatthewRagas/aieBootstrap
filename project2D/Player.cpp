@@ -18,10 +18,10 @@ Player::Player(int health, int movespeed, Vector2 *position, float rotation)
 	mMovespeed = movespeed;
 	mPosition = position;
 	mRotation = rotation;
-	mBullets = new Bullet[500];
-	mNumBullets = 500;
+	mBullets = new Bullet[100];
+	mNumBullets = 100;
 	mCurrentBullet = 0;
-	for (int i = 0; i < 500; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		mBullets[i] = Bullet(mPosition, 500, 10);
 	}
@@ -60,13 +60,13 @@ void Player::MovePlayer(float deltaTime, aie::Input *input)
 	}
 
 		if(mRotation == 0 && input->wasKeyPressed(aie::INPUT_KEY_RIGHT))
-			mBullets[mCurrentBullet++].Fire(Vector2(1,0));
+			mBullets[mCurrentBullet++].Fire(Vector2(2,0), *mPosition);
 		if((mRotation > 1 && mRotation < 2) && input->wasKeyPressed(aie::INPUT_KEY_UP))
-			mBullets[mCurrentBullet++].Fire(Vector2(0, 1));
+			mBullets[mCurrentBullet++].Fire(Vector2(0, 2), *mPosition);
 		if ((mRotation > 3 && mRotation < 4) && input->wasKeyPressed(aie::INPUT_KEY_LEFT))
-			mBullets[mCurrentBullet++].Fire(Vector2(-1, 0));
+			mBullets[mCurrentBullet++].Fire(Vector2(-2, 0), *mPosition);
 		if((mRotation > 4 && mRotation < 5) && input->wasKeyPressed(aie::INPUT_KEY_DOWN))
-			mBullets[mCurrentBullet++].Fire(Vector2(0, -1));
+			mBullets[mCurrentBullet++].Fire(Vector2(0, -2), *mPosition);
 
 	if (mCurrentBullet >= mNumBullets)
 		mCurrentBullet = 0;
