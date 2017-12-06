@@ -14,32 +14,35 @@ Zombie::Zombie(int damage, int speed, int life, Vector2 * pos)
 	mDamage = damage;
 	mWalkSpeed = speed;
 	mLife = life;
-	mPosition = pos;
+	mPos = pos;
+	mIsSpawned = false;
 }
 
 //Spawns zombies every 30 seconds
 void Zombie::SpawnZombie()
 {
+	int amount = 500;
+	Zombie zombies[500];
+	for (int i = 0; i < amount; i++)
+	{
+		zombies[i] = *new Zombie(10, 120, 10, mPos);
+	}
+	mIsSpawned = true;
 }
 
 //Zombie spawns and begins to walk to and follow the player position each frame
-void Zombie::ZombieWalk(float deltaTime)
+void Zombie::ZombieWalk(Vector2 dir)
 {
-	Vector2* distance = new Vector2(mPosition->mX - mPlayerPos->mPosition->mX,
-									mPosition->mY - mPlayerPos->mPosition->mY);
-	if (distance->mX > 1)
-		distance->mX -= 120 * deltaTime;
-	if (distance->mX < -1)
-		distance->mX += 120 * deltaTime;
-	if (distance->mY > 1)
-		distance->mY -= 120 * deltaTime;
-	if (distance->mY < -1)
-		distance->mY += 120 * deltaTime;
-
+	mDir = new Vector2(dir.mX, dir.mY);
 }
 
 void Zombie::DoDamage()
 {
+}
+
+void Zombie::SetTargetPosition(Player& player)
+{
+	mPos = player.mPosition;
 }
 
 int Zombie::GetDamage()
