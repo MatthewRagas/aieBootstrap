@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Walls.h"
+#include "Zombies.h"
 
 class Application2D : public aie::Application {
 public:
@@ -28,8 +29,9 @@ protected:
 	aie::Texture*		mTruckTexture;
 	aie::Font*			m_font;
 
-	Player *mPlayer;
+	Player mPlayer;
 	Walls *mTruck;
+	Zombie mZombie;
 
 	float m_cameraX, m_cameraY;
 	float m_timer;

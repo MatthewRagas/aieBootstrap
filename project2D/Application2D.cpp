@@ -32,10 +32,12 @@ bool Application2D::startup() {
 	mPy = 450;
 
 	//Creation of a player object*
-	mPlayer = new Player(100, 250, new Vector2(mPx, mPy), 0.0);
+	mPlayer = Player(100, 250, new Vector2(mPx, mPy), 0.0);
 	//Creation of walls
 	mTruck = new Walls(new Vector2(900, 500));
-
+	//Zombie
+	mZombie = Zombie(10, 120, 10,new Vector2(100,100));
+	mZombie.SetTargetPosition(mPlayer);
 	return true;
 }
 
@@ -55,13 +57,18 @@ void Application2D::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	// use WASD to move Player*
-	if(mPlayer->GetHealth() > 0 && m_timer < 300){
-		mPlayer->MovePlayer(deltaTime, input);
+	if(mPlayer.GetHealth() > 0 && m_timer < 300){
+		mPlayer.MovePlayer(deltaTime, input);
 	}
+
+	//Spawn Zombies
+	//Creation of Zombies
+	mZombie.SpawnZombie();
+
 
 	//Player take damage*
 	if (input->isKeyDown(aie::INPUT_KEY_Q))
-		mPlayer->TakeDamage(10);
+		mPlayer.TakeDamage(10);
 
 	// exit the application
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
@@ -84,6 +91,10 @@ void Application2D::draw() {
 	m_2dRenderer->setRenderColour(1, 1, 1, 1);
 	m_2dRenderer->drawSprite(mTruckTexture,mTruck->mPos->mX, mTruck->mPos->mY, 300, 300, 0.75, 0);
 
+	//Drawing Zombies
+	m_2dRenderer->setRenderColour(1, 1, 1, 1);
+	m_2dRenderer->drawBox(mZombie.mPos->mX, mZombie.mPos->mY, 50, 50, 0, 0);
+
 	// output some text, uses the last used colour
 	m_2dRenderer->setRenderColour(1, 0, 0, 1);
 	char fps[32];
@@ -92,21 +103,21 @@ void Application2D::draw() {
 	m_2dRenderer->drawText(m_font, "Arcade Zombies", 0, 850);
 
 	//Draw Bullets*
-	for (int i = 0; i < mPlayer->mNumBullets; i++)
+	for (int i = 0; i < mPlayer.mNumBullets; i++)
 	{
-		if (mPlayer->mBullets[i].mIsFired)
+		if (mPlayer.mBullets[i].mIsFired)
 			m_2dRenderer->setRenderColour(1, 1, 1, 1);
-		m_2dRenderer->drawSprite(mBulletTexture, mPlayer->mBullets[i].mPosition->mX, mPlayer->mBullets[i].mPosition->mY,
-			5, 5, mPlayer->mRotation);
+		m_2dRenderer->drawSprite(mBulletTexture, mPlayer.mBullets[i].mPosition->mX, mPlayer.mBullets[i].mPosition->mY,
+			5, 5, mPlayer.mRotation);
 	}
 
 	// Draw player*
 	m_2dRenderer->setRenderColour(1, 1, 1, 1);
-	m_2dRenderer->drawSprite(mPlayerTexture, mPlayer->Position().mX, mPlayer->Position().mY,
-							 80, 80, mPlayer->mRotation);
+	m_2dRenderer->drawSprite(mPlayerTexture, mPlayer.Position().mX, mPlayer.Position().mY,
+							 80, 80, mPlayer.mRotation);
 
 	//Game Over Text*
-	if (mPlayer->GetHealth() <= 0)
+	if (mPlayer.GetHealth() <= 0)
 	{
 		m_2dRenderer->setRenderColour(1, 0, 1, 1);
 		m_2dRenderer->drawText(m_font, "You dieded...", 650, 650);
