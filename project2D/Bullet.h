@@ -14,5 +14,5 @@ public:
 	~Bullet();
 	Bullet(Vector2 *position, int movespeed, int damage);
 	void FireBullet(float deltaTime);
-	void Fire(Vector2 dir);
+	void Fire(Vector2 dir, Vector2 orgin);
 };

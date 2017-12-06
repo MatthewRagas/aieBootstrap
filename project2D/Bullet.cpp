@@ -25,8 +25,9 @@ void Bullet::FireBullet(float deltaTime)
 	*mPosition = *mPosition + *mDirection * mMovespeed * deltaTime;
 }
 
-void Bullet::Fire(Vector2 dir)
+void Bullet::Fire(Vector2 dir, Vector2 orgin)
 {
 	mIsFired = true;
+	mPosition = new Vector2(orgin.mX, orgin.mY);
 	mDirection = new Vector2(dir.mX, dir.mY);
 }
